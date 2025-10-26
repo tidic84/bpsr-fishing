@@ -1,0 +1,60 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    IMAGES NÉCESSAIRES POUR LE BOT                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Placez vos captures d'écran dans le dossier : images_reference/
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ IMAGES                                                                       │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+1. exclamation_point.png
+   ├─ Quoi : Le point d'exclamation (!) qui apparaît pendant la pêche
+   ├─ Quand : Quand le poisson mord
+   └─ Usage : Le bot clique dessus pour attraper le poisson
+
+2. button_continue.png
+   ├─ Quoi : Le bouton "Continue" dans le menu de fin
+   ├─ Quand : Après avoir attrapé un poisson avec succès
+   └─ Usage : Le bot clique dessus pour fermer le menu et recommencer
+
+3. fishing_ready.png
+   ├─ Quoi : L'indicateur qui montre que la canne est prête
+   ├─ Quand : Après avoir terminé une pêche (succès ou échec)
+   └─ Usage : Le bot attend que cet indicateur apparaisse avant de recommencer
+
+4. use_button.png
+   ├─ Quoi : Le bouton "Use" dans le menu de sélection des cannes
+   ├─ Quand : Menu ouvert avec la touche "," (virgule)
+   └─ Usage : Le bot clique dessus pour équiper une nouvelle canne
+
+5. rod_broken.png
+   ├─ Quoi : Un indicateur visuel qui apparaît quand la canne est cassée
+   ├─ Quand : Quand la canne se casse
+   └─ Usage : Permet de détecter si la canne est cassée sans ouvrir le menu
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CONSEILS DE CAPTURE                                                           │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+✓ Capturez UNIQUEMENT l'élément (pas de fond)
+✓ Images nettes et claires
+✓ Taille recommandée : 30-100 pixels
+✓ Format PNG
+✓ Gardez toujours la même résolution de jeu
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ RÉSUMÉ RAPIDE                                                                 │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+LES 5 IMAGES SONT OBLIGATOIRES :
+  • exclamation_point.png    ← Détection du point d'exclamation
+  • button_continue.png       ← Bouton pour continuer après succès
+  • fishing_ready.png         ← Indicateur canne prête
+  • use_button.png            ← Bouton pour équiper une canne
+  • rod_broken.png            ← Détection de canne cassée
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  Placez vos images PNG dans : automation_peche/images_reference/            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+

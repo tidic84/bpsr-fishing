@@ -96,10 +96,12 @@ class FishingBotLowLevel:
         template_files = {
             "exclamation": "exclamation_point.png",
             "continue": "button_continue.png",
-            "ready": "fishing_ready.png",  # Optionnel : canne prête
-            "rod_broken": "rod_broken.png",  # Optionnel : canne cassée
-            "use_button": "use_button.png",  # Bouton "Use" dans le menu
+            "ready": "fishing_ready.png",
+            "rod_broken": "rod_broken.png",
+            "use_button": "use_button.png",
         }
+        
+        missing_images = []
         
         for key, filename in template_files.items():
             filepath = os.path.join(self.images_dir, filename)
@@ -108,10 +110,24 @@ class FishingBotLowLevel:
                 if img is not None:
                     self.templates[key] = img
                     print(f"✓ Image chargée: {filename}")
+                else:
+                    print(f"❌ Erreur de lecture: {filename}")
+                    missing_images.append(filename)
+            else:
+                print(f"❌ Image manquante: {filename}")
+                missing_images.append(filename)
         
-        if not self.templates:
-            print("\n❌ ERREUR: Aucune image de référence trouvée!")
-            print("   Veuillez exécuter calibration.py d'abord.\n")
+        # Vérifier que TOUTES les 5 images sont présentes
+        if len(self.templates) != 5:
+            print("\n" + "="*60)
+            print("❌ ERREUR: Images manquantes!")
+            print("="*60)
+            print("\nLes 5 images suivantes sont OBLIGATOIRES:")
+            for filename in template_files.values():
+                status = "✓" if filename not in missing_images else "❌"
+                print(f"  {status} {filename}")
+            print(f"\nPlacez les images dans: {self.images_dir}/")
+            print("Voir images.txt pour plus de détails.\n")
             sys.exit(1)
     
     def load_positions(self):
