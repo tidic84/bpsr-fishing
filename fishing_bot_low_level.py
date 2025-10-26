@@ -96,6 +96,7 @@ class FishingBotLowLevel:
         template_files = {
             "exclamation": "exclamation_point.png",
             "continue": "button_continue.png",
+            "ready": "fishing_ready.png",  # Optionnel : canne prête
         }
         
         for key, filename in template_files.items():
@@ -267,25 +268,50 @@ class FishingBotLowLevel:
             print(f"✓ Point d'exclamation détecté à {exclamation_pos}")
             self.safe_click(*exclamation_pos)
             
-            # Étape 3: Attendre le QTE ou le succès direct
-            print("[Étape 3] Attente du résultat (QTE ou succès direct)...")
-            time.sleep(self.qte_wait_time)
+            # Étape 3: Vérifier immédiatement si Continue apparaît (succès direct)
+            print("[Étape 3] Vérification du résultat...")
+            time.sleep(3)  # Petit délai pour que l'interface réagisse
             
-            # Étape 4: Chercher le bouton Continue
-            print("[Étape 4] Recherche du bouton Continue...")
-            continue_pos = self.find_on_screen("continue", timeout=self.continue_button_timeout)
+            # Chercher Continue immédiatement (timeout court)
+            continue_pos = self.find_on_screen("continue", timeout=2)
             
             if continue_pos is None:
-                print("⚠ Bouton Continue non détecté - Nouvelle tentative...")
-                time.sleep(3)
-                continue_pos = self.find_on_screen("continue", timeout=5)
+                # Pas de Continue = QTE en cours
+                print("  → QTE détecté, attente automatique...")
+                time.sleep(self.qte_wait_time)
+                
+                # Après le QTE, chercher Continue à nouveau
+                print("[Étape 4] Recherche du bouton Continue après QTE...")
+                continue_pos = self.find_on_screen("continue", timeout=self.continue_button_timeout)
+                
+                if continue_pos is None:
+                    print("⚠ Bouton Continue non détecté - Nouvelle tentative...")
+                    time.sleep(3)
+                    continue_pos = self.find_on_screen("continue", timeout=5)
+            else:
+                # Continue trouvé immédiatement = succès direct !
+                print("  ✓ Succès direct (pas de QTE)!")
             
             if continue_pos:
                 print(f"✓ Bouton Continue détecté à {continue_pos}")
                 self.safe_click(*continue_pos)
                 self.stats["fish_caught"] += 1
                 print(f"🎣 Poisson pêché! Total: {self.stats['fish_caught']}")
-                time.sleep(1)
+                
+                # Étape 5: Attendre que la canne soit prête (si image disponible)
+                if "ready" in self.templates:
+                    print("[Étape 5] Attente que la canne soit prête...")
+                    ready_pos = self.find_on_screen("ready", timeout=10)
+                    if ready_pos:
+                        print("  ✓ Canne prête!")
+                    else:
+                        # Si pas détecté, attendre un délai fixe
+                        print("  ⚠ Indicateur non détecté, attente de 2 secondes...")
+                        time.sleep(2)
+                else:
+                    # Si pas d'image de référence, attendre un peu
+                    time.sleep(1)
+                
                 return True
             else:
                 print("⚠ Impossible de trouver le bouton Continue")
@@ -398,4 +424,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

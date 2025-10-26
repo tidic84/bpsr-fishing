@@ -135,6 +135,17 @@ class CalibrationTool:
                 "Bouton 'Exit'"
             )
         
+        # Capture 4: Indicateur canne prête (optionnel mais recommandé)
+        print("\n💡 OPTIMISATION: Voulez-vous capturer l'indicateur 'canne prête'?")
+        print("   Cela permet au bot de relancer la pêche plus rapidement! (o/n)")
+        if input().lower() == 'o':
+            print("\n   Capturez l'élément qui indique que vous pouvez pêcher à nouveau")
+            print("   (icône, texte, barre, etc.)")
+            self.capture_region(
+                "fishing_ready",
+                "Indicateur canne prête"
+            )
+        
         # Position de clic pour commencer la pêche
         print("\nVoulez-vous enregistrer une position de clic pour commencer la pêche? (o/n)")
         if input().lower() == 'o':

@@ -192,3 +192,4 @@ print("   Comparez visuellement avec votre image de référence\n")
 
 print("="*70 + "\n")
 
+

@@ -250,3 +250,4 @@ time.sleep(0.5)
 
 **Dites-moi quel jeu vous utilisez et comment vous pêchez manuellement, et je vais adapter le bot spécifiquement ! 🎣**
 
+

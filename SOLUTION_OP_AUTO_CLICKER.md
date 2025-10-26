@@ -219,3 +219,4 @@ En testant OP Auto Clicker, vous avez découvert que votre jeu bloque PyAutoGUI 
 
 **Testez et dites-moi si ça fonctionne ! 🎮**
 
+
