@@ -246,7 +246,7 @@ class FishingBotLowLevel:
         # Ouvrir le menu de sélection de canne avec ","
         print("  → Ouverture du menu de cannes (touche ',')...")
         pyautogui.press(',')
-        time.sleep(0.8)  # Laisser le menu s'ouvrir
+        time.sleep(0.5)  # Laisser le menu s'ouvrir
         
         # Chercher le bouton "Use"
         if "use_button" in self.templates:
@@ -256,12 +256,12 @@ class FishingBotLowLevel:
             if use_pos:
                 print(f"  ✓ Bouton 'Use' trouvé à {use_pos}")
                 self.safe_click(*use_pos)
-                time.sleep(0.5)
+                time.sleep(0.3)
                 
                 # Fermer le menu (appuyer à nouveau sur ,)
                 print("  → Fermeture du menu...")
                 pyautogui.press(',')
-                time.sleep(0.5)
+                time.sleep(0.3)
                 
                 print("  ✓ Canne équipée avec succès!")
                 return True
@@ -311,8 +311,6 @@ class FishingBotLowLevel:
         try:
             # Étape 0: Vérifier et réparer la canne AVANT de commencer
             self.check_and_repair_rod()
-
-            time.sleep(3)
             
             # Étape 1: Cliquer pour commencer la pêche
             print("\n[Étape 1] Démarrage de la pêche...")
@@ -330,8 +328,6 @@ class FishingBotLowLevel:
                 time.sleep(1)
                 return False
             
-            time.sleep(0.5)
-            
             # Étape 2: Attendre et détecter le point d'exclamation
             print("[Étape 2] Attente du point d'exclamation...")
             exclamation_pos = self.find_on_screen("exclamation", timeout=self.exclamation_timeout)
@@ -347,10 +343,10 @@ class FishingBotLowLevel:
             
             # Étape 3: Vérifier immédiatement si Continue apparaît (succès direct)
             print("[Étape 3] Vérification du résultat...")
-            time.sleep(3)  # Petit délai pour que l'interface réagisse
+            time.sleep(0.5)  # Petit délai pour que l'interface réagisse
             
             # Chercher Continue immédiatement (timeout court)
-            continue_pos = self.find_on_screen("continue", timeout=2)
+            continue_pos = self.find_on_screen("continue", timeout=3)
             
             if continue_pos is None:
                 # Pas de Continue = QTE en cours
@@ -373,6 +369,7 @@ class FishingBotLowLevel:
                 # Continue trouvé immédiatement = succès direct !
                 print("  ✓ Succès direct (pas de QTE)!")
                 print(f"✓ Bouton Continue détecté à {continue_pos}")
+                time.sleep(1)
                 self.safe_click(*continue_pos)
                 self.stats["fish_caught"] += 1
                 print(f"🎣 Poisson pêché! Total: {self.stats['fish_caught']}")
@@ -456,8 +453,6 @@ class FishingBotLowLevel:
                 
                 if cycle_count % 10 == 0:
                     self.print_stats()
-                
-                time.sleep(1)
                 
         except KeyboardInterrupt:
             print("\n\n⚠ Interruption par l'utilisateur (Ctrl+C)")
