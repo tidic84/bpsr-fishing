@@ -74,7 +74,6 @@ class FishingBotLowLevel:
         self.wait_after_click = 0.5
         self.exclamation_timeout = 30
         self.continue_button_timeout = 10
-        self.qte_wait_time = 8
         
         # Obtenir la taille de l'écran pour SendInput
         self.screen_width = ctypes.windll.user32.GetSystemMetrics(0)
@@ -355,23 +354,17 @@ class FishingBotLowLevel:
             
             if continue_pos is None:
                 # Pas de Continue = QTE en cours
-                print("  → QTE détecté, on laisse expirer (pas de bouton Continue après)...")
-                time.sleep(self.qte_wait_time)
+                print("  → QTE détecté, attente de l'indicateur 'canne prête'...")
                 
-                # Après le QTE, PAS de bouton Continue, juste attendre que la canne soit prête
-                print("[Étape 4] QTE expiré, attente que la canne soit prête...")
+                # Attendre directement que la canne soit prête (sans délai fixe)
+                # Le QTE expire automatiquement et l'indicateur apparaîtra
+                print("[Étape 4] Attente active de l'indicateur 'canne prête'...")
                 
-                if "ready" in self.templates:
-                    ready_pos = self.find_on_screen("ready", timeout=15)
-                    if ready_pos:
-                        print("  ✓ Canne prête!")
-                    else:
-                        print("  ⚠ Indicateur non détecté, attente de 3 secondes...")
-                        time.sleep(3)
+                ready_pos = self.find_on_screen("ready", timeout=20)
+                if ready_pos:
+                    print("  ✓ Canne prête détectée!")
                 else:
-                    # Si pas d'image de référence, attendre un délai fixe
-                    print("  ⚠ Pas d'indicateur configuré, attente de 3 secondes...")
-                    time.sleep(3)
+                    print("  ⚠ Indicateur non détecté après 20 secondes, on continue...")
                 
                 # La vérification de canne se fera au début du prochain cycle
                 self.stats["fishing_attempts"] += 1  # Tentative mais pas de poisson
