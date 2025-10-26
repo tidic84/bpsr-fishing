@@ -1,0 +1,175 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║            🎮 RÉSUMÉ : SOURIS CAPTURÉE PAR LE JEU                            ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+PROBLÈME IDENTIFIÉ :
+  ✅ Les clics fonctionnent dans les MENUS
+  ❌ Les clics ne fonctionnent PAS dans le JEU
+  → La souris est CAPTURÉE par le jeu (normal pour les jeux 3D)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         🎯 SOLUTIONS DISPONIBLES                             ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ ⭐ SOLUTION #1 : Bot CLAVIER (RECOMMANDÉE)                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Si votre jeu utilise une TOUCHE pour pêcher (E, F, Espace, etc.)
+
+📁 Fichier : fishing_bot_keyboard.py
+
+✅ Avantages:
+  - Pas besoin de position précise
+  - Fonctionne même si l'interface bouge
+  - Plus fiable que les clics
+  - Simple à configurer
+
+🚀 Lancement:
+  1. python calibration.py           # Capturer ! et Continue
+  2. python fishing_bot_keyboard.py  # Lancer le bot
+  3. Entrez votre touche (ex: e)
+
+💡 Le bot:
+  - Appuie sur votre touche pour démarrer
+  - Détecte le point d'exclamation
+  - Re-appuie sur la touche pour attraper
+  - Clique sur Continue dans le menu
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🔓 SOLUTION #2 : Bot avec LIBÉRATION ESC                                     │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Si vous DEVEZ cliquer ET que ESC libère la souris
+
+📁 Fichier : fishing_bot_with_esc.py
+
+✅ Utiliser si:
+  - Vous devez cliquer à un endroit précis
+  - ESC (ou Tab/Alt) libère la souris
+  - Le jeu a un menu de pêche
+
+🚀 Lancement:
+  1. python calibration.py          # Tout calibrer
+  2. python fishing_bot_with_esc.py # Lancer le bot
+  3. Entrez la touche de libération (esc)
+
+💡 Le bot:
+  - Appuie sur ESC pour libérer la souris
+  - Clique à la position de pêche
+  - Détecte le point d'exclamation
+  - Clique sur Continue
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ 🖱️ SOLUTION #3 : Bot NORMAL (si souris libre)                               │
+└──────────────────────────────────────────────────────────────────────────────┘
+
+Si la souris est LIBRE dans votre jeu (rare)
+
+📁 Fichier : fishing_bot.py (original)
+
+🚀 Lancement:
+  1. python calibration.py  # Tout calibrer
+  2. python fishing_bot.py  # Lancer le bot
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    🤔 QUELLE VERSION CHOISIR ?                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Méthode 1 : LANCEUR INTERACTIF (le plus simple)
+  > python lancer_bot.py
+  
+  Le script vous pose des questions et choisit pour vous !
+
+Méthode 2 : TEST MANUEL
+
+  1. Dans le jeu, comment pêchez-vous manuellement ?
+     → J'appuie sur une TOUCHE    → Solution #1 (CLAVIER) ⭐
+     → Je CLIQUE                   → Continuez...
+  
+  2. Appuyez sur ESC dans le jeu:
+     → La souris redevient libre   → Solution #2 (LIBÉRATION ESC)
+     → Rien ne change              → Vérifiez les paramètres du jeu
+
+  3. Votre souris est libre partout → Solution #3 (NORMAL)
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         📁 FICHIERS CRÉÉS                                    ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Bots disponibles:
+  fishing_bot.py               - Bot original (souris libre)
+  fishing_bot_keyboard.py      - Bot avec touche clavier ⭐ RECOMMANDÉ
+  fishing_bot_with_esc.py      - Bot avec libération ESC
+
+Outils:
+  calibration.py               - Calibration (toujours nécessaire)
+  lancer_bot.py                - Lanceur interactif
+  test_clic_peche.py           - Test de diagnostic
+
+Documentation:
+  CHOISIR_VERSION.md           - Guide complet de choix
+  SOLUTION_SOURIS_CAPTUREE.md  - Solutions détaillées
+  RESUME_SOURIS_CAPTUREE.txt   - Ce fichier
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      ⚡ DÉMARRAGE ULTRA-RAPIDE                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Si votre jeu utilise une TOUCHE pour pêcher (cas le plus fréquent):
+
+  > python calibration.py           # D'abord
+  > python fishing_bot_keyboard.py  # Ensuite
+
+C'est tout ! 🎣
+
+Si vous ne savez pas:
+
+  > python lancer_bot.py
+
+Le script vous guidera !
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                         💡 CONSEILS IMPORTANTS                               ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+1. Mode d'affichage:
+   ✓ Fenêtré SANS BORDURE (Borderless Windowed) - IDÉAL
+   ✓ Fenêtré (Windowed) - OK
+   ✗ Plein écran (Fullscreen) - Peut poser problème
+
+2. Calibration:
+   - Vous devez TOUJOURS faire: python calibration.py
+   - Capturez le point d'exclamation (!)
+   - Capturez le bouton Continue
+   - La position de clic n'est PAS nécessaire pour la version CLAVIER
+
+3. Overlays:
+   - Désactivez Discord overlay
+   - Désactivez Steam overlay
+   - Désactivez GeForce Experience overlay
+
+4. Tests:
+   - Testez d'abord avec python test_clic_peche.py
+   - Vérifiez que les détections fonctionnent
+   - Ajustez la confiance si nécessaire
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                      📞 BESOIN D'AIDE ?                                      ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+Consultez dans l'ordre:
+
+1. SOLUTIONS_RAPIDES.txt          (Solutions aux problèmes courants)
+2. CHOISIR_VERSION.md             (Guide de choix détaillé)
+3. SOLUTION_SOURIS_CAPTUREE.md    (Guide technique complet)
+4. README.md                      (Documentation générale)
+5. GUIDE_DEBUTANT.md              (Pour les novices)
+
+Ou lancez simplement:
+  > python lancer_bot.py
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║  Pour 90% des jeux: utilisez fishing_bot_keyboard.py ! 🎹                   ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+

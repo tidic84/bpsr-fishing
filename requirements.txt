@@ -1,0 +1,16 @@
+# Dépendances pour le bot d'automatisation de pêche
+
+# Contrôle de la souris et du clavier
+pyautogui==0.9.54
+
+# Traitement d'image et détection
+opencv-python==4.8.1.78
+numpy==1.24.3
+Pillow==10.1.0
+
+# Gestion des touches clavier (arrêt d'urgence)
+keyboard==0.13.5
+
+# Optionnel mais recommandé pour de meilleures performances
+# scipy==1.11.4
+
