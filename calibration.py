@@ -146,6 +146,29 @@ class CalibrationTool:
                 "Indicateur canne prête"
             )
         
+        # Capture 5: Bouton "Use" dans le menu de cannes (optionnel mais recommandé)
+        print("\n💡 GESTION DES CANNES: Voulez-vous capturer le bouton 'Use'?")
+        print("   Cela permet au bot de ré-équiper automatiquement une canne cassée! (o/n)")
+        if input().lower() == 'o':
+            print("\n   Instructions:")
+            print("   1. Appuyez sur ',' pour ouvrir le menu de cannes")
+            print("   2. Capturez le bouton 'Use' à côté d'une canne")
+            self.capture_region(
+                "use_button",
+                "Bouton 'Use' dans le menu de cannes"
+            )
+        
+        # Capture 6: Indicateur canne cassée (optionnel)
+        print("\n💡 DÉTECTION AVANCÉE: Voulez-vous capturer l'indicateur 'canne cassée'?")
+        print("   Permet de détecter visuellement quand la canne est cassée (o/n)")
+        if input().lower() == 'o':
+            print("\n   Capturez l'élément qui apparaît quand la canne est cassée")
+            print("   (icône, texte, symbole, etc.)")
+            self.capture_region(
+                "rod_broken",
+                "Indicateur canne cassée"
+            )
+        
         # Position de clic pour commencer la pêche
         print("\nVoulez-vous enregistrer une position de clic pour commencer la pêche? (o/n)")
         if input().lower() == 'o':

@@ -97,6 +97,8 @@ class FishingBotLowLevel:
             "exclamation": "exclamation_point.png",
             "continue": "button_continue.png",
             "ready": "fishing_ready.png",  # Optionnel : canne prête
+            "rod_broken": "rod_broken.png",  # Optionnel : canne cassée
+            "use_button": "use_button.png",  # Bouton "Use" dans le menu
         }
         
         for key, filename in template_files.items():
@@ -207,6 +209,61 @@ class FishingBotLowLevel:
         
         return None
     
+    def check_and_repair_rod(self):
+        """
+        Vérifie si la canne est cassée et la remplace si nécessaire
+        
+        Returns:
+            True si tout est OK, False en cas d'erreur
+        """
+        print("[Vérification] Contrôle de l'état de la canne...")
+        
+        # Vérification optionnelle : détecter visuellement si la canne est cassée
+        if "rod_broken" in self.templates:
+            broken_detected = self.find_on_screen("rod_broken", timeout=1)
+            if broken_detected:
+                print("  ⚠️ Canne cassée détectée visuellement!")
+            else:
+                # Si l'indicateur existe mais n'est pas détecté, la canne est OK
+                print("  ✓ Canne en bon état (détection visuelle)")
+                return True
+        
+        # Ouvrir le menu de sélection de canne avec ","
+        print("  → Ouverture du menu de cannes (touche ',')...")
+        pyautogui.press(',')
+        time.sleep(0.8)  # Laisser le menu s'ouvrir
+        
+        # Chercher le bouton "Use"
+        if "use_button" in self.templates:
+            print("  → Recherche du bouton 'Use'...")
+            use_pos = self.find_on_screen("use_button", timeout=3)
+            
+            if use_pos:
+                print(f"  ✓ Bouton 'Use' trouvé à {use_pos}")
+                self.safe_click(*use_pos)
+                time.sleep(0.5)
+                
+                # Fermer le menu (appuyer à nouveau sur ,)
+                print("  → Fermeture du menu...")
+                pyautogui.press(',')
+                time.sleep(0.5)
+                
+                print("  ✓ Canne équipée avec succès!")
+                return True
+            else:
+                print("  ⚠️ Bouton 'Use' non trouvé")
+                # Fermer le menu quand même
+                pyautogui.press(',')
+                time.sleep(0.5)
+                return True  # Continuer quand même
+        else:
+            # Si pas d'image du bouton Use, on suppose que c'est OK
+            print("  → Pas de détection du bouton 'Use' configurée")
+            print("  → Fermeture du menu...")
+            pyautogui.press(',')
+            time.sleep(0.5)
+            return True
+    
     def safe_click(self, x=None, y=None, position_name=None):
         """
         Effectue un clic en utilisant SendInput (bas niveau)
@@ -237,6 +294,11 @@ class FishingBotLowLevel:
     def fishing_cycle(self):
         """Exécute un cycle complet de pêche"""
         try:
+            # Étape 0: Vérifier et réparer la canne AVANT de commencer
+            self.check_and_repair_rod()
+
+            time.sleep(3)
+            
             # Étape 1: Cliquer pour commencer la pêche
             print("\n[Étape 1] Démarrage de la pêche...")
             self.stats["fishing_attempts"] += 1
@@ -287,19 +349,17 @@ class FishingBotLowLevel:
                     ready_pos = self.find_on_screen("ready", timeout=15)
                     if ready_pos:
                         print("  ✓ Canne prête!")
-                        self.stats["fishing_attempts"] += 1  # Tentative mais pas de poisson
-                        return True
                     else:
                         print("  ⚠ Indicateur non détecté, attente de 3 secondes...")
                         time.sleep(3)
-                        self.stats["fishing_attempts"] += 1
-                        return True
                 else:
                     # Si pas d'image de référence, attendre un délai fixe
                     print("  ⚠ Pas d'indicateur configuré, attente de 3 secondes...")
                     time.sleep(3)
-                    self.stats["fishing_attempts"] += 1
-                    return True
+                
+                # La vérification de canne se fera au début du prochain cycle
+                self.stats["fishing_attempts"] += 1  # Tentative mais pas de poisson
+                return True
             else:
                 # Continue trouvé immédiatement = succès direct !
                 print("  ✓ Succès direct (pas de QTE)!")
@@ -323,6 +383,7 @@ class FishingBotLowLevel:
                     print("  ⚠ Pas d'indicateur configuré, attente de 1 seconde...")
                     time.sleep(1)
                 
+                # La vérification de canne se fera au début du prochain cycle
                 return True
                 
         except Exception as e:
@@ -363,6 +424,13 @@ class FishingBotLowLevel:
         cycle_count = 0
         
         print("\n🚀 Bot démarré!\n")
+        
+        # Vérification initiale de la canne avant de commencer
+        print("═" * 60)
+        print(" VÉRIFICATION INITIALE")
+        print("═" * 60)
+        self.check_and_repair_rod()
+        print()
         
         try:
             while self.running:
