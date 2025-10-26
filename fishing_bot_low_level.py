@@ -277,30 +277,40 @@ class FishingBotLowLevel:
             
             if continue_pos is None:
                 # Pas de Continue = QTE en cours
-                print("  → QTE détecté, attente automatique...")
+                print("  → QTE détecté, on laisse expirer (pas de bouton Continue après)...")
                 time.sleep(self.qte_wait_time)
                 
-                # Après le QTE, chercher Continue à nouveau
-                print("[Étape 4] Recherche du bouton Continue après QTE...")
-                continue_pos = self.find_on_screen("continue", timeout=self.continue_button_timeout)
+                # Après le QTE, PAS de bouton Continue, juste attendre que la canne soit prête
+                print("[Étape 4] QTE expiré, attente que la canne soit prête...")
                 
-                if continue_pos is None:
-                    print("⚠ Bouton Continue non détecté - Nouvelle tentative...")
+                if "ready" in self.templates:
+                    ready_pos = self.find_on_screen("ready", timeout=15)
+                    if ready_pos:
+                        print("  ✓ Canne prête!")
+                        self.stats["fishing_attempts"] += 1  # Tentative mais pas de poisson
+                        return True
+                    else:
+                        print("  ⚠ Indicateur non détecté, attente de 3 secondes...")
+                        time.sleep(3)
+                        self.stats["fishing_attempts"] += 1
+                        return True
+                else:
+                    # Si pas d'image de référence, attendre un délai fixe
+                    print("  ⚠ Pas d'indicateur configuré, attente de 3 secondes...")
                     time.sleep(3)
-                    continue_pos = self.find_on_screen("continue", timeout=5)
+                    self.stats["fishing_attempts"] += 1
+                    return True
             else:
                 # Continue trouvé immédiatement = succès direct !
                 print("  ✓ Succès direct (pas de QTE)!")
-            
-            if continue_pos:
                 print(f"✓ Bouton Continue détecté à {continue_pos}")
                 self.safe_click(*continue_pos)
                 self.stats["fish_caught"] += 1
                 print(f"🎣 Poisson pêché! Total: {self.stats['fish_caught']}")
                 
                 # Étape 5: Attendre que la canne soit prête (si image disponible)
+                print("[Étape 5] Attente que la canne soit prête...")
                 if "ready" in self.templates:
-                    print("[Étape 5] Attente que la canne soit prête...")
                     ready_pos = self.find_on_screen("ready", timeout=10)
                     if ready_pos:
                         print("  ✓ Canne prête!")
@@ -310,14 +320,10 @@ class FishingBotLowLevel:
                         time.sleep(2)
                 else:
                     # Si pas d'image de référence, attendre un peu
+                    print("  ⚠ Pas d'indicateur configuré, attente de 1 seconde...")
                     time.sleep(1)
                 
                 return True
-            else:
-                print("⚠ Impossible de trouver le bouton Continue")
-                self.stats["errors"] += 1
-                time.sleep(1)
-                return False
                 
         except Exception as e:
             print(f"❌ Erreur dans le cycle de pêche: {e}")
